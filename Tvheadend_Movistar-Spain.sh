@@ -9,7 +9,7 @@ cyan='\e[1;36m'
 end='\e[0m'
 
 clear
-if [[ $(id -u) -ne 0 ]]; then
+if [ $(id -u) -ne 0 ]; then
 	printf "$red%s$end\n" "ERROR: Por favor, ejecute el script como root.
 	
 	Puede hacerlo de diferentes formas:
@@ -23,13 +23,16 @@ fi
 
 if [ -f "Tvheadend_Movistar-Spain.log" ]; then
 	mv "Tvheadend_Movistar-Spain.log" "Tvheadend_Movistar-Spain.old.log" 2>>Tvheadend_Movistar-Spain.log
-	rm "Tvheadend_Movistar-Spain.log" 2>>Tvheadend_Movistar-Spain.log
 fi
 
 
-if [[ -z "$COLUMNS" ]]; then
+if [ -z "$COLUMNS" ]; then
 	COLUMNS=80
 fi
+
+
+command -v curl >/dev/null 2>&1 || { printf "$red%s\n%s$end\n" "ERROR: Es necesario tener instalado 'curl'." "Por favor, ejecute el script de nuevo una vez haya sido instalado."; exit 1; }
+command -v wget >/dev/null 2>&1 || { printf "$red%s\n%s$end\n" "ERROR: Es necesario tener instalado 'wget'." "Por favor, ejecute el script de nuevo una vez haya sido instalado."; exit 1; }
 
 
 LIST_ERROR=false #INSTALLED_LIST=true
@@ -37,7 +40,7 @@ GRABBER_ERROR=false #INSTALLED_GRABBER=true
 SERVICE_ERROR=false
 
 
-LOCAL_SCRIPT_VERSION="20170516"
+LOCAL_SCRIPT_VERSION="20191004"
 REMOTE_SCRIPT_VERSION="$(curl -fLs https://github.com/manuelrn/Tvheadend_Movistar-Spain/raw/master/version.txt | grep ^"SCRIPT_VERSION" | cut -d'=' -f2)" 2>>Tvheadend_Movistar-Spain.log
 URL_SCRIPT="https://github.com/manuelrn/Tvheadend_Movistar-Spain/raw/master/Tvheadend_Movistar-Spain.sh" 2>>Tvheadend_Movistar-Spain.log
 
@@ -210,7 +213,7 @@ if [ "$1" = "-b" -o "$1" = "-B" ]; then
 fi
 
 
-if [[ -d $TVHEADEND_CONFIG_DIR/channel ]]; then
+if [ -d $TVHEADEND_CONFIG_DIR/channel ]; then
 	TVHEADEND_CHANNEL_USER=$(stat -c %U $TVHEADEND_CONFIG_DIR/channel) 2>/dev/null
 	TVHEADEND_CHANNEL_GROUP=$(stat -c %G $TVHEADEND_CONFIG_DIR/channel) 2>/dev/null
 	TVHEADEND_CHANNEL_PERMISSIONS=$(stat -c %a $TVHEADEND_CONFIG_DIR/channel) 2>/dev/null
@@ -225,7 +228,7 @@ else
 	TVHEADEND_CHANNEL_PERMISSIONS=$TVHEADEND_PERMISSIONS
 fi
 
-if [[ -d $TVHEADEND_CONFIG_DIR/epggrab ]]; then
+if [ -d $TVHEADEND_CONFIG_DIR/epggrab ]; then
 	TVHEADEND_EPGGRAB_USER=$(stat -c %U $TVHEADEND_CONFIG_DIR/epggrab) 2>/dev/null
 	TVHEADEND_EPGGRAB_GROUP=$(stat -c %G $TVHEADEND_CONFIG_DIR/epggrab) 2>/dev/null
 	TVHEADEND_EPGGRAB_PERMISSIONS=$(stat -c %a $TVHEADEND_CONFIG_DIR/epggrab) 2>/dev/null
@@ -240,7 +243,7 @@ else
 	TVHEADEND_EPGGRAB_PERMISSIONS=$TVHEADEND_PERMISSIONS
 fi
 
-if [[ -d $TVHEADEND_CONFIG_DIR/input ]]; then
+if [ -d $TVHEADEND_CONFIG_DIR/input ]; then
 	TVHEADEND_INPUT_USER=$(stat -c %U $TVHEADEND_CONFIG_DIR/input) 2>/dev/null
 	TVHEADEND_INPUT_GROUP=$(stat -c %G $TVHEADEND_CONFIG_DIR/input) 2>/dev/null
 	TVHEADEND_INPUT_PERMISSIONS=$(stat -c %a $TVHEADEND_CONFIG_DIR/input) 2>/dev/null
@@ -255,7 +258,7 @@ else
 	TVHEADEND_INPUT_PERMISSIONS=$TVHEADEND_PERMISSIONS
 fi
 
-if [[ -d $TVHEADEND_CONFIG_DIR/Picons ]]; then
+if [ -d $TVHEADEND_CONFIG_DIR/Picons ]; then
 	TVHEADEND_PICONS_USER=$(stat -c %U $TVHEADEND_CONFIG_DIR/Picons) 2>/dev/null
 	TVHEADEND_PICONS_GROUP=$(stat -c %G $TVHEADEND_CONFIG_DIR/Picons) 2>/dev/null
 	TVHEADEND_PICONS_PERMISSIONS=$(stat -c %a $TVHEADEND_CONFIG_DIR/Picons) 2>/dev/null
@@ -699,9 +702,9 @@ if [ -f "tv_grab_movistar-spain" ]; then
 fi
 
 
-if [ ! -s Tvheadend_Movistar-Spain.old.log ]; then
+if [ -f "Tvheadend_Movistar-Spain.old.log" -a ! -s Tvheadend_Movistar-Spain.old.log ]; then
 	rm "Tvheadend_Movistar-Spain.old.log" 2>>Tvheadend_Movistar-Spain.log
 fi
-if [ ! -s Tvheadend_Movistar-Spain.log ]; then
+if [ -f "Tvheadend_Movistar-Spain.log" -a ! -s Tvheadend_Movistar-Spain.log ]; then
 	rm "Tvheadend_Movistar-Spain.log" 2>>Tvheadend_Movistar-Spain.log
 fi
